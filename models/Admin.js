@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
+import { timeStamp } from 'console';
 
 const adminSchema = new mongoose.Schema({
   email: {
@@ -14,7 +15,6 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide a password'],
     minlength: 3,
-    select: false
   },
   role: {
     type: String,
@@ -25,16 +25,16 @@ const adminSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-});
+}, {timeStamps: true});
 
-adminSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 12);
-  next();
-});
+// adminSchema.pre('save', async function(next) {
+//   if (!this.isModified('password')) return next();
+//   this.password = await bcrypt.hash(this.password, 12);
+//   next();
+// });
 
-adminSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
-  return await bcrypt.compare(candidatePassword, userPassword);
-};
+// adminSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
+//   return await bcrypt.compare(candidatePassword, userPassword);
+// };
 
 export default  mongoose.model('Admin', adminSchema);

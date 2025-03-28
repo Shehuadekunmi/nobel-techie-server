@@ -24,8 +24,11 @@ const createAdmin = catchAsync(async (req, res) => {
     return res.status(400).send("Admin already exists");
   }
 
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
   // Create new admin (Mongoose will handle password hashing)
-  const newAdmin = new Admin({ email, password });
+  const newAdmin = new Admin({ email, password: hashedPassword });
 
   try {
     await newAdmin.save();
