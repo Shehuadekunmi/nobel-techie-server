@@ -41,16 +41,17 @@ const createWinner = catchAsync(async (req, res, next) => {
     juryName
   } = req.body;
 
-  // Basic validation
+  console.log(req.body);
+  
+
   if (!candidateName || !certificateNumber) {
-    return next(new AppError('candidateName and certificateNumber are required.', 400));
+    return next(new AppError('Candidate name and certificate number are required.', 400));
   }
 
-  // Safely handle images
+  // Ensure req.files exists before accessing properties
   const image = req.files?.image ? req.files.image[0].filename : null;
   const juryImage = req.files?.juryImage ? req.files.juryImage[0].filename : null;
 
-  // Create the winner
   const winner = await Winner.create({
     candidateName,
     certificateNumber,
@@ -71,6 +72,7 @@ const createWinner = catchAsync(async (req, res, next) => {
     data: { winner }
   });
 });
+
 
 
 const updateWinner = catchAsync(async (req, res, next) => {

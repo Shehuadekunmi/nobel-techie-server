@@ -56,11 +56,11 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // File upload
-app.use(fileUpload({
-  useTempFiles: true,
-  tempFileDir: '/tmp/',
-  limits: { fileSize: 15 * 1024 * 1024 } // 15MB
-}));
+// app.use(fileUpload({
+//   useTempFiles: true,
+//   tempFileDir: '/tmp/',
+//   limits: { fileSize: 15 * 1024 * 1024 } // 15MB
+// }));
 
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
