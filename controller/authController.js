@@ -74,6 +74,7 @@ const login = catchAsync(async (req, res) => {
     _id: existingAdmin._id,
     email: existingAdmin.email,
     role: existingAdmin.role,
+    token,
   });
 });
 

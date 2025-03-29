@@ -21,7 +21,7 @@ router.patch('/update-password', updatePassword);
 // Restrict to admin and super-admin
 router.use(restrictTo('admin', 'super-admin'));
 
-router.route('/winners')
+router.route('/winners') 
   // .get(getAllWinners)
   .post(createWinner);
 
