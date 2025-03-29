@@ -9,6 +9,8 @@ const router = express.Router();
 router.route("/").post(createAdmin);
 router.post('/login', login);
 router.get('/logout', logout);
+router.get('/winners', getAllWinners)
+router.get('/winners/:id', getWinner);
 
 // Protect all routes after this middleware
 router.use(protect);
@@ -20,11 +22,11 @@ router.patch('/update-password', updatePassword);
 router.use(restrictTo('admin', 'super-admin'));
 
 router.route('/winners')
-  .get(getAllWinners)
+  // .get(getAllWinners)
   .post(createWinner);
 
 router.route('/winners/:id')
-  .get(getWinner)
+  // .get(getWinner)
   .patch(updateWinner)
   .delete(deleteWinner);
 
