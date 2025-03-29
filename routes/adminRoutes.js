@@ -9,27 +9,25 @@ const router = express.Router();
 router.route("/").post(createAdmin);
 router.post('/login', login);
 router.get('/logout', logout);
-// router.get('/winners', getAllWinners)
 router.get('/winners/:id', getWinner);
 router.route('/winners') 
   .get(getAllWinners)
   .post(createWinner);
 
 // Protect all routes after this middleware
-router.use(protect);
+// router.use(protect);
 
 router.get('/me', getMe);
 router.patch('/update-password', updatePassword);
 
 // Restrict to admin and super-admin
-router.use(restrictTo('admin', 'super-admin'));
+// router.use(restrictTo('admin', 'super-admin'));
 
-router.route('/winners') 
-  // .get(getAllWinners)
-  .post(createWinner);
+// router.route('/winners') 
+//   // .get(getAllWinners)
+//   .post(createWinner);
 
 router.route('/winners/:id')
-  // .get(getWinner)
   .patch(updateWinner)
   .delete(deleteWinner);
 
