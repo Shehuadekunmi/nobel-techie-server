@@ -9,8 +9,11 @@ const router = express.Router();
 router.route("/").post(createAdmin);
 router.post('/login', login);
 router.get('/logout', logout);
-router.get('/winners', getAllWinners)
+// router.get('/winners', getAllWinners)
 router.get('/winners/:id', getWinner);
+router.route('/winners') 
+  .get(getAllWinners)
+  .post(createWinner);
 
 // Protect all routes after this middleware
 router.use(protect);
