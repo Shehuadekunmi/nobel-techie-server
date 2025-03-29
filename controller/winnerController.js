@@ -31,18 +31,19 @@ const getWinner = catchAsync(async (req, res, next) => {
 
 const createWinner = catchAsync(async (req, res, next) => {
   const {
-    name,
+    candidateName,
     certificateNumber,
     role,
     company,
     country,
     description,
+    blogContent,
     juryName
   } = req.body;
 
   // Basic validation
-  if (!name || !certificateNumber) {
-    return next(new AppError('Name and certificateNumber are required.', 400));
+  if (!candidateName || !certificateNumber) {
+    return next(new AppError('candidateName and certificateNumber are required.', 400));
   }
 
   // Safely handle images
@@ -51,12 +52,13 @@ const createWinner = catchAsync(async (req, res, next) => {
 
   // Create the winner
   const winner = await Winner.create({
-    name,
+    candidateName,
     certificateNumber,
     role,
     company,
     country,
     description,
+    blogContent,
     image,
     jury: {
       name: juryName,

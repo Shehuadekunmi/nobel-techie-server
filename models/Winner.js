@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const winnerSchema = new mongoose.Schema({
-  name: {
+  candidateName: {
     type: String,
     required: [true, 'Please provide the winner name']
   },
@@ -14,6 +14,7 @@ const winnerSchema = new mongoose.Schema({
   company: String,
   country: String,
   description: String,
+  blogContent: String,
   image: String,
   jury: {
     name: String,
