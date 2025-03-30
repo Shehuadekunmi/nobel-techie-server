@@ -1,6 +1,7 @@
 import Application from '../models/Application.js';
 import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
+import { cloudinary } from "../utils/cloudinary.js";
 
 const createApplication = catchAsync(async (req, res, next) => {
   const {
@@ -11,9 +12,28 @@ const createApplication = catchAsync(async (req, res, next) => {
     organizationWebsite,
     organizationPosition,
     contributionDescription,
-    contributionOutcomes
+    contributionOutcomes,
   } = req.body;
 
+  let evidenceUrl = null;
+  let cvUrl = null;
+
+  // Upload files to Cloudinary if they exist
+  if (req.files?.evidence) {
+    const evidenceUpload = await cloudinary.uploader.upload(req.files.evidence.tempFilePath, {
+      folder: "uploads",
+    });
+    evidenceUrl = evidenceUpload.secure_url;
+  }
+
+  if (req.files?.cv) {
+    const cvUpload = await cloudinary.uploader.upload(req.files.cv.tempFilePath, {
+      folder: "uploads",
+    });
+    cvUrl = cvUpload.secure_url;
+  }
+
+  // Create application entry
   const application = await Application.create({
     surname,
     firstName,
@@ -21,25 +41,24 @@ const createApplication = catchAsync(async (req, res, next) => {
     organization: {
       name: organizationName,
       website: organizationWebsite,
-      position: organizationPosition
+      position: organizationPosition,
     },
     contribution: {
       description: contributionDescription,
-      outcomes: contributionOutcomes
+      outcomes: contributionOutcomes,
     },
     files: {
-      evidence: req.files?.evidence?.[0]?.filename,
-      cv: req.files?.cv?.[0]?.filename
-    }
+      evidence: evidenceUrl,
+      cv: cvUrl,
+    },
   });
 
   res.status(201).json({
-    status: 'success',
-    data: {
-      application
-    }
+    status: "success",
+    data: { application },
   });
 });
+
 
 const getAllApplications = catchAsync(async (req, res, next) => {
   const applications = await Application.find().sort('-createdAt');

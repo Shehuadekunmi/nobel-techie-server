@@ -1,6 +1,6 @@
 import express from 'express';
 import {getAllWinners, getWinner, createWinner, updateWinner, deleteWinner} from '../controller/winnerController.js';
-import {login, logout, protect, restrictTo, createAdmin} from '../controller/authController.js'
+import {login, logout, createAdmin} from '../controller/authController.js'
 import {updatePassword, getAllApplications, getApplication, getMe} from '../controller/adminController.js'
 
 
@@ -14,18 +14,10 @@ router.route('/winners')
   .get(getAllWinners)
   .post(createWinner);
 
-// Protect all routes after this middleware
-// router.use(protect);
 
 router.get('/me', getMe);
 router.patch('/update-password', updatePassword);
 
-// Restrict to admin and super-admin
-// router.use(restrictTo('admin', 'super-admin'));
-
-// router.route('/winners') 
-//   // .get(getAllWinners)
-//   .post(createWinner);
 
 router.route('/winners/:id')
   .patch(updateWinner)

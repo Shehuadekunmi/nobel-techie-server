@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-// const port = process.env.PORT || 5000;
+
+
 const connectDB = async () => {
     try {
         const mongoUri = process.env.MONGO_URI;

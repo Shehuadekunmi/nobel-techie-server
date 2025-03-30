@@ -1,6 +1,7 @@
 import Winner from '../models/Winner.js';
 import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
+import { cloudinary } from '../utils/cloudinary.js';
 
 const getAllWinners = catchAsync(async (req, res, next) => {
   const winners = await Winner.find().sort('-issuedAt');
@@ -43,14 +44,26 @@ const createWinner = catchAsync(async (req, res, next) => {
 
   console.log(req.body);
   
+  let imageUrl = null;
+  let juryImageUrl = null;
+  
+  if (req.files?.image) {
+    const imageUpload = await cloudinary.uploader.upload(req.files.image.tempFilePath, {
+      folder: "uploads",
+    });
+    imageUrl = imageUpload.secure_url;
+  }
+
+  if (req.files.juryImage) {
+    const juryImageUpload = await cloudinary.uploader.upload(req.files.juryImage.tempFilePath, {
+      folder: "upload",
+    });
+    juryImageUrl = juryImageUpload.secure_url;
+  }
 
   if (!candidateName || !certificateNumber) {
     return next(new AppError('Candidate name and certificate number are required.', 400));
   }
-
-  // Ensure req.files exists before accessing properties
-  const image = req.files?.image ? req.files.image[0].filename : null;
-  const juryImage = req.files?.juryImage ? req.files.juryImage[0].filename : null;
 
   const winner = await Winner.create({
     candidateName,
@@ -60,10 +73,10 @@ const createWinner = catchAsync(async (req, res, next) => {
     country,
     description,
     blogContent,
-    image,
+    image: imageUrl,
     jury: {
       name: juryName,
-      image: juryImage
+      juryImage: juryImageUrl
     }
   });
 
@@ -72,7 +85,6 @@ const createWinner = catchAsync(async (req, res, next) => {
     data: { winner }
   });
 });
-
 
 
 const updateWinner = catchAsync(async (req, res, next) => {

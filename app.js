@@ -41,7 +41,7 @@ import authRoutes from './routes/adminRoutes.js'
 import applicationRoutes from './routes/applicationRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import certificateRoutes from './routes/certificateRoutes.js'
-import uploadRoutes from './routes/uploadRoutes.js'
+
 
 
 // Rate limiting
@@ -56,11 +56,11 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // File upload
-// app.use(fileUpload({
-//   useTempFiles: true,
-//   tempFileDir: '/tmp/',
-//   limits: { fileSize: 15 * 1024 * 1024 } // 15MB
-// }));
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: '/tmp/',
+  limits: { fileSize: 15 * 1024 * 1024 } // 15MB
+}));
 
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -71,11 +71,10 @@ app.use('/api/auth',  authRoutes);
 app.use('/api/applications', applicationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/certificates', certificateRoutes);
-app.use('/api/uploads', uploadRoutes);
 
 
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));
 
-// export default app;
+

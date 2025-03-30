@@ -18,7 +18,7 @@ const winnerSchema = new mongoose.Schema({
   image: String,
   jury: {
     name: String,
-    image: String
+    juryImage: String
   },
   issuedAt: {
     type: Date,

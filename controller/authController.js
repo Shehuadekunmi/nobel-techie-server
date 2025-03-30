@@ -18,7 +18,6 @@ const createAdmin = catchAsync(async (req, res) => {
     throw new Error("Please fill all the inputs");
   }
 
-  // Check if admin already exists (case-insensitive)
   const userExist = await Admin.findOne({ email: { $regex: new RegExp('^' + email + '$', 'i') } });
   if (userExist) {
     return res.status(400).send("Admin already exists");
@@ -26,8 +25,7 @@ const createAdmin = catchAsync(async (req, res) => {
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
-
-  // Create new admin (Mongoose will handle password hashing)
+  
   const newAdmin = new Admin({ email, password: hashedPassword });
 
   try {

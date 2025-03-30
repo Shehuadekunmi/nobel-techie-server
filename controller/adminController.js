@@ -9,20 +9,18 @@ import catchAsync from '../utils/catchAsync.js';
   };
 
 const updatePassword = catchAsync(async (req, res, next) => {
-  // 1) Get admin from collection
+
   const admin = await Admin.findById(req.admin.id).select('+password');
 
-  // 2) Check if POSTed current password is correct
   if (!(await admin.correctPassword(req.body.passwordCurrent, admin.password))) {
     return next(new AppError('Your current password is wrong.', 401));
   }
 
-  // 3) If so, update password
   admin.password = req.body.password;
   admin.passwordConfirm = req.body.passwordConfirm;
   await admin.save();
 
-  // 4) Log admin in, send JWT
+
   const token = admin.getSignedJwtToken();
 
   res.cookie('jwt', token, {
