@@ -43,6 +43,7 @@ const createWinner = catchAsync(async (req, res, next) => {
   } = req.body;
 
   console.log(req.body);
+
   
   let imageUrl = null;
   let juryImageUrl = null;
@@ -52,9 +53,14 @@ const createWinner = catchAsync(async (req, res, next) => {
       folder: "uploads",
     });
     imageUrl = imageUpload.secure_url;
-  }
+  };
 
-  if (req.files.juryImage) {
+  console.log("🔥 FULL req.body:", JSON.stringify(req.body, null, 2));
+console.log("🔥 FULL req.files:", JSON.stringify(req.files, null, 2));
+
+
+  if (req.files?.juryImage) {
+    console.log("✅ juryImage detected, uploading...");
     const juryImageUpload = await cloudinary.uploader.upload(req.files.juryImage.tempFilePath, {
       folder: "upload",
     });
@@ -64,6 +70,9 @@ const createWinner = catchAsync(async (req, res, next) => {
   if (!candidateName || !certificateNumber) {
     return next(new AppError('Candidate name and certificate number are required.', 400));
   }
+
+  console.log("🔥 Request Body:", req.body);
+console.log("🔥 Request Files:", req.files);
 
   const winner = await Winner.create({
     candidateName,
