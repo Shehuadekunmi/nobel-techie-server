@@ -34,6 +34,7 @@ const createWinner = catchAsync(async (req, res, next) => {
   const {
     candidateName,
     certificateNumber,
+    year,
     role,
     company,
     country,
@@ -50,44 +51,44 @@ const createWinner = catchAsync(async (req, res, next) => {
   
   if (req.files?.image) {
     const imageUpload = await cloudinary.uploader.upload(req.files.image.tempFilePath, {
-      folder: "uploads",
+      folder: "uploads", 
     });
-    imageUrl = imageUpload.secure_url;
+    imageUrl = imageUpload.secure_url;  
   };
 
-  console.log("🔥 FULL req.body:", JSON.stringify(req.body, null, 2));
-console.log("🔥 FULL req.files:", JSON.stringify(req.files, null, 2));
+//   console.log("🔥 FULL req.body:", JSON.stringify(req.body, null, 2));
+// console.log("🔥 FULL req.files:", JSON.stringify(req.files, null, 2));
 
 
-  if (req.files?.juryImage) {
+  if (req.files?.juryImage) { 
     console.log("✅ juryImage detected, uploading...");
     const juryImageUpload = await cloudinary.uploader.upload(req.files.juryImage.tempFilePath, {
       folder: "upload",
     });
     juryImageUrl = juryImageUpload.secure_url;
   }
-
+  
   if (!candidateName || !certificateNumber) {
     return next(new AppError('Candidate name and certificate number are required.', 400));
   }
 
-  console.log("🔥 Request Body:", req.body);
-console.log("🔥 Request Files:", req.files);
+//   console.log("🔥 Request Body:", req.body);
+// console.log("🔥 Request Files:", req.files);
 
   const winner = await Winner.create({
     candidateName,
     certificateNumber,
+    year,
     role,
     company,
     country,
     description,
     blogContent,
     image: imageUrl,
-    jury: {
-      name: juryName,
-      juryImage: juryImageUrl
-    }
-  });
+    juryName,
+    juryImage: juryImageUrl
+       
+  }); 
 
   res.status(201).json({
     status: 'success',

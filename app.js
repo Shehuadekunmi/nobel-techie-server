@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url';
 import errorHandler from './middleware/errorMiddleware.js';
 import connectDB from './server.js';
 import dotenv from "dotenv" 
+import compression from 'compression';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,6 +26,7 @@ connectDB();
 const app = express();
 
 // Security middleware
+app.use(compression())
 app.use(helmet());
 app.use(mongoSanitize());
 app.use(xss());

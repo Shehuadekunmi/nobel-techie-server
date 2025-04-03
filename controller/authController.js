@@ -49,15 +49,13 @@ const login = catchAsync(async (req, res) => {
 
   console.log("🛠️ Received login request:", { email, password });
 
-  // Find admin by email
-  const existingAdmin = await Admin.findOne({ email }).select("+password"); // Ensure password is selected
+  const existingAdmin = await Admin.findOne({ email }).select("+password"); 
 
   if (!existingAdmin) {
     console.log("❌ Admin not found");
     throw new Error("Invalid email or password");
   }
 
-  // Compare passwords
   const isPasswordValidate = await bcrypt.compare(password, existingAdmin.password);
 
   if (!isPasswordValidate) {
@@ -65,7 +63,6 @@ const login = catchAsync(async (req, res) => {
     throw new Error("Invalid email or password");
   }
 
-  // Generate and send token
   createToken(res, existingAdmin._id);
 
   res.status(200).json({
@@ -112,14 +109,7 @@ const protect = async (req, res, next) => {
 
 
 
-const restrictTo = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return next(new AppError('You do not have permission to perform this action', 403));
-    }
-    next();
-  };
-};
 
 
-export {createAdmin, login, logout, protect, restrictTo} 
+
+export {createAdmin, login, logout, protect} 

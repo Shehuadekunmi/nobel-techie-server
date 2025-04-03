@@ -4,16 +4,18 @@ import catchAsync from '../utils/catchAsync.js';
 import { cloudinary } from "../utils/cloudinary.js";
 
 const createApplication = catchAsync(async (req, res, next) => {
+  const organization = JSON.parse(req.body.organization || "{}");
+  console.log("Parsed Organization:", organization);
+
   const {
     surname,
     firstName,
     email,
-    organizationName,
-    organizationWebsite,
-    organizationPosition,
-    contributionDescription,
-    contributionOutcomes,
-  } = req.body;
+    contribution,
+    outcome, 
+  } = req.body;   
+
+
 
   let evidenceUrl = null;
   let cvUrl = null;
@@ -26,6 +28,7 @@ const createApplication = catchAsync(async (req, res, next) => {
     evidenceUrl = evidenceUpload.secure_url;
   }
 
+
   if (req.files?.cv) {
     const cvUpload = await cloudinary.uploader.upload(req.files.cv.tempFilePath, {
       folder: "uploads",
@@ -33,20 +36,22 @@ const createApplication = catchAsync(async (req, res, next) => {
     cvUrl = cvUpload.secure_url;
   }
 
-  // Create application entry
+  // console.log("🔥 FULL req.body:", JSON.stringify(req.body, null, 2));
+  // console.log("🔥 FULL req.files:", JSON.stringify(req.files, null, 2));
+  
+   
+ 
   const application = await Application.create({
     surname,
     firstName,
-    email,
+    email, 
     organization: {
-      name: organizationName,
-      website: organizationWebsite,
-      position: organizationPosition,
+      name: organization.name || "",
+      website: organization.website || "",
+      position: organization.position || "",
     },
-    contribution: {
-      description: contributionDescription,
-      outcomes: contributionOutcomes,
-    },
+    contribution,
+    outcome,
     files: {
       evidence: evidenceUrl,
       cv: cvUrl,

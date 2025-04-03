@@ -27,14 +27,5 @@ const adminSchema = new mongoose.Schema({
   }
 }, {timeStamps: true});
 
-// adminSchema.pre('save', async function(next) {
-//   if (!this.isModified('password')) return next();
-//   this.password = await bcrypt.hash(this.password, 12);
-//   next();
-// });
-
-// adminSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
-//   return await bcrypt.compare(candidatePassword, userPassword);
-// };
 
 export default  mongoose.model('Admin', adminSchema);

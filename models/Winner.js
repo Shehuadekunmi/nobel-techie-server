@@ -10,16 +10,16 @@ const winnerSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  year: String,
   role: String,
   company: String,
   country: String,
   description: String,
   blogContent: String,
   image: String,
-  jury: {
-    name: String,
-    juryImage: String
-  },
+  juryName: String,
+  juryImage: String,
+  
   issuedAt: {
     type: Date,
     default: Date.now
@@ -30,6 +30,5 @@ const winnerSchema = new mongoose.Schema({
   }
 });
 
-// winnerSchema.index({ certificateNumber: 1 }); 
 
 export default mongoose.model('Winner', winnerSchema);

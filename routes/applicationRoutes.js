@@ -9,4 +9,4 @@ router.get('/:id', getApplication);
 router.patch('/:id', updateApplicationStatus);
 router.delete('/:id', deleteApplication);
 
-export default  router;
+export default  router; 

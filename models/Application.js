@@ -27,13 +27,15 @@ const applicationSchema = new mongoose.Schema({
     position: String
   },
   contribution: {
-    description: {
       type: String,
       required: [true, 'Please describe your contribution'],
       // minlength: [500, 'Description must be at least 500 characters']
-    },
-    outcomes: String
   },
+  outcome: {
+    type: String,
+    required: true,
+  },
+  
   files: {
     evidence: String,
     cv: String
