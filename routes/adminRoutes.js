@@ -19,7 +19,7 @@ router.get('/me', getMe);
 router.patch('/update-password', updatePassword);
 
 
-router.route('/winners/:id')
+router.route('/winners/:id') 
   .patch(updateWinner)
   .delete(deleteWinner);
 
