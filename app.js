@@ -33,7 +33,7 @@ app.use(xss());
 app.use(cookieParser());
 // app.use(cors());
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://noble-techie.netlify.app'], 
+  origin: ['http://localhost:5173', 'https://nobel-tech.netlify.app'], 
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
