@@ -54,7 +54,7 @@ const login = catchAsync(async (req, res) => {
   if (!existingAdmin) {
     console.log("❌ Admin not found");
     throw new Error("Invalid email or password");
-  }
+  } 
 
   const isPasswordValidate = await bcrypt.compare(password, existingAdmin.password);
 
@@ -63,12 +63,13 @@ const login = catchAsync(async (req, res) => {
     throw new Error("Invalid email or password");
   }
 
-  createToken(res, existingAdmin._id);
+   const token = createToken(res, existingAdmin._id);
 
   res.status(200).json({
     _id: existingAdmin._id,
     email: existingAdmin.email,
     role: existingAdmin.role,
+    token
   });
 });
 

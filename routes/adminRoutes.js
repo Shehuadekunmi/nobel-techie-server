@@ -2,8 +2,9 @@ import express from 'express';
 import {getAllWinners, getWinner, createWinner, updateWinner, deleteWinner} from '../controller/winnerController.js';
 import {login, logout, createAdmin} from '../controller/authController.js'
 import {updatePassword, getAllApplications, getApplication, getMe} from '../controller/adminController.js'
+import fileUpload from 'express-fileupload';
 
-
+const app = express();
 const router = express.Router();
 
 router.route("/").post(createAdmin);
@@ -19,8 +20,12 @@ router.get('/me', getMe);
 router.patch('/update-password', updatePassword);
 
 
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: '/tmp/'
+}));
 router.route('/winners/:id') 
-  .patch(updateWinner)
+  .put(updateWinner)
   .delete(deleteWinner);
 
 router.get('/applications', getAllApplications);

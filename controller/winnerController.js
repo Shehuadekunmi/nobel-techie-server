@@ -98,20 +98,35 @@ const createWinner = catchAsync(async (req, res, next) => {
 
 
 const updateWinner = catchAsync(async (req, res, next) => {
-  const winner = await Winner.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
-  
+  // 1. Handle file uploads to Cloudinary
+  const uploadFile = async (file) => {
+    if (!file) return null;
+    const result = await cloudinary.uploader.upload(file.tempFilePath);
+    return result.secure_url;
+  };
+
+  // 2. Process image uploads (if new files were uploaded)
+  if (req.files?.image) {
+    req.body.image = await uploadFile(req.files.image);
+  }
+  if (req.files?.juryImage) {
+    req.body.juryImage = await uploadFile(req.files.juryImage);
+  }
+
+  // 3. Update winner data
+  const winner = await Winner.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true, runValidators: true }
+  );
+
   if (!winner) {
     return next(new AppError('No winner found with that ID', 404));
   }
-  
+
   res.status(200).json({
     status: 'success',
-    data: {
-      winner
-    }
+    data: { winner }
   });
 });
 
